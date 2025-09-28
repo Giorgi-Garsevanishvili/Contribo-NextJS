@@ -1,13 +1,31 @@
 import { PrismaClient } from "@/generated/prisma";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-const body = {
-  id: "",
-  name: "lela",
-  email: "lela@example.com",
-};
+const body = [
+  {
+    name: "Alice Johnson",
+    email: "alice.johnson@example.com",
+  },
+  {
+    name: "Bob Smith",
+    email: "bob.smith@example.com",
+  },
+  {
+    name: "Charlie Brown",
+    email: "charlie.brown@example.com",
+  },
+  {
+    name: "Diana Prince",
+    email: "diana.prince@example.com",
+  },
+  {
+    name: "Ethan Hunt",
+    email: "ethan.hunt@example.com",
+  },
+];
 
 export async function GET() {
   try {
@@ -27,7 +45,7 @@ export async function GET() {
 
 export async function POST() {
   try {
-    await prisma.user.create({ data: body });
+    await prisma.user.createMany({ data: body });
     return NextResponse.json({ success: true, message: "users created" });
   } catch (error) {
     console.error(error);
@@ -37,18 +55,28 @@ export async function POST() {
   }
 }
 
-export async function DELETE() {
+export async function DELETE(req: Request) {
   try {
-    await prisma.user.delete({ where: { id: String(body.id) } });
+    const body = await req.json();
+    const { id } = body;
+
+    if (!id) {
+      return NextResponse.json({
+        success: false,
+        message: "ID is missing",
+      });
+    }
+
+    await prisma.user.delete({ where: { id: String(id) } });
     return NextResponse.json({
       success: true,
-      message: `user with id: ${body.id} successfully deleted!`,
+      message: `user with id: ${id} successfully deleted!`,
     });
   } catch (error) {
     console.error();
     return NextResponse.json({
       success: false,
-      message: "faild to delete user",
+      message: "failed to delete user",
     });
   } finally {
     prisma.$disconnect();
