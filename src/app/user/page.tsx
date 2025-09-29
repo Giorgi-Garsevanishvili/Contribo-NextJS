@@ -5,20 +5,31 @@ import Persons from "./Persons";
 import { useState } from "react";
 import Loading from "../about/loading";
 
-function user() {
-  const [person, setPerson] = useState<any>(null);
-  const [loading, setLoading] = useState<Boolean>(false);
+type Individual = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+};
+
+type People = Array<Individual>;
+
+function UserPage() {
+  const [person, setPerson] = useState<People | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  console.log(person);
 
   async function getUsers() {
     try {
       setPerson(null);
       setLoading(true);
       const data = await axios.get("/api/seed");
-      setPerson(data.data);
+      setPerson(data.data.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error();
+      throw new Error(`failed to fetch ${error}`);
     }
   }
 
@@ -31,7 +42,7 @@ function user() {
       console.error(error);
     }
   }
-  async function deleteUser(id: String) {
+  async function deleteUser(id: string) {
     try {
       const data = await axios.delete("/api/seed", { data: { id } });
       console.log(data);
@@ -54,10 +65,10 @@ function user() {
       <button onClick={handleSeed}>Add Data</button>
       <div>{loading ? <Loading /> : null}</div>
       <div>
-        {person ? <Persons data={person.data} deleteUser={deleteUser} /> : null}
+        {person ? <Persons data={person} deleteUser={deleteUser} /> : null}
       </div>
     </>
   );
 }
 
-export default user;
+export default UserPage;

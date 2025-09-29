@@ -1,5 +1,4 @@
 import { PrismaClient } from "@/generated/prisma";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -35,7 +34,7 @@ export async function GET() {
       data: data,
     });
   } catch (error) {
-    console.error();
+    console.error(error);
     return NextResponse.json({
       success: false,
       message: "faild to fetch data",
@@ -73,7 +72,7 @@ export async function DELETE(req: Request) {
       message: `user with id: ${id} successfully deleted!`,
     });
   } catch (error) {
-    console.error();
+    console.error(error);
     return NextResponse.json({
       success: false,
       message: "failed to delete user",

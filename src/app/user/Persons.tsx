@@ -3,14 +3,11 @@ type Person = {
   id: string;
   name: string;
   role: string;
-  Actions: Actions[];
 };
-
-type Actions = {};
 
 type PersonProps = {
   data: Person[];
-  deleteUser: (id: String) => Promise<void>;
+  deleteUser: (id: string) => Promise<void>;
 };
 
 function Persons({ data, deleteUser }: PersonProps) {
