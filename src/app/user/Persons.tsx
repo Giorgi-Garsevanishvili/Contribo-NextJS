@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Person = {
   email: string;
   id: string;
@@ -20,6 +22,9 @@ function Persons({ data, deleteUser }: PersonProps) {
         <h4>name: {name}</h4>
         <h4>email: {email}</h4>
         <h4>Role: {role}</h4>
+        <button>
+          <Link href={`http://localhost:3000/user/${id}`}>Update Link</Link>
+        </button>
         <button onClick={() => deleteUser(id)}>Delete</button>
       </div>
     );
