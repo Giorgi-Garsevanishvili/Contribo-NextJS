@@ -60,9 +60,25 @@ function UserPage() {
 
   return (
     <>
-      <div>user</div>
-      <button onClick={getUsers}>Get Users</button>
-      <button onClick={handleSeed}>Add Data</button>
+      <div className="flex justify-center bg-gray-200 w-full items-center">
+        User
+      </div>
+      <div className="flex">
+        <button
+          className="flex m-1 gap-5 bg-blue-200
+      p-2 border-1 "
+          onClick={getUsers}
+        >
+          Get Users
+        </button>
+        <button
+          className="flex m-1 gap-5 bg-blue-200
+      p-2 border-1 "
+          onClick={handleSeed}
+        >
+          Add Data
+        </button>
+      </div>
       <div>{loading ? <Loading /> : null}</div>
       <div>
         {person ? <Persons data={person} deleteUser={deleteUser} /> : null}

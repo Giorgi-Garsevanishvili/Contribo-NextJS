@@ -17,15 +17,16 @@ function Persons({ data, deleteUser }: PersonProps) {
     const { name, email, role, id } = item;
 
     return (
-      <div key={item.id}>
-        <h3>Person</h3>
+      <div className="flex-r border-1 m-2 p-2 bg-gray-100" key={item.id}>
+        <h3 className="font-bold">Person</h3>
         <h4>name: {name}</h4>
         <h4>email: {email}</h4>
         <h4>Role: {role}</h4>
-        <button>
+
+        <button className="p-1 m-1 bg-orange-200 ">
           <Link href={`http://localhost:3000/user/${id}`}>Update Link</Link>
         </button>
-        <button onClick={() => deleteUser(id)}>Delete</button>
+        <button className="p-1 m-1 bg-red-100" onClick={() => deleteUser(id)}>Delete</button>
       </div>
     );
   });

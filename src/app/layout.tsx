@@ -1,5 +1,8 @@
+import Nav from "./(components)/Nav";
 import Footer from "./Header-Footer/footer";
-import Header from "./Header-Footer/header";
+import AuthProvider from "./(components)/AuthProvider";
+
+import "./globals.css";
 
 export const metadata = {
   title: "Next.js",
@@ -15,9 +18,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <header>
-          <Header />
+          <Nav />
         </header>
-        {children}
+        <AuthProvider>
+          <div className="m-2">{children}</div>
+        </AuthProvider>
         <footer>
           <Footer />
         </footer>
