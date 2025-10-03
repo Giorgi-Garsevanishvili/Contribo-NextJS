@@ -1,16 +1,41 @@
+import withAuth, { NextRequestWithAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-  // return NextResponse.redirect(new URL("/", request.url));
+const protectedUrl = ["/CreateUser", "/ClientMember", "/Member"];
 
-  if (request.nextUrl.pathname === "/") {
-    return NextResponse.rewrite(new URL("/user", request.nextUrl));
+const authMiddleware = withAuth(
+  function middleware(req: NextRequestWithAuth) {
+    const { pathname } = req.nextUrl;
+
+    if (
+      protectedUrl.some((url) => pathname.startsWith(url)) &&
+      req.nextauth.token?.role !== "admin"
+    ) {
+      return NextResponse.rewrite(new URL("/Denied", req.url));
+    }
+
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => !!token,
+    },
   }
+);
+
+export function middleware(req: NextRequestWithAuth, event: any) {
+  const { pathname } = req.nextUrl;
+
+  if (pathname === "/") {
+    return NextResponse.rewrite(new URL("/user", req.url));
+  } else if (!protectedUrl.some((url) => pathname.startsWith(url))) {
+    return NextResponse.next();
+  }
+
+  return authMiddleware(req, event);
 }
 
-//rewrite -- option to keep legacy but serve for different source
-
-// export const config = {
-//   matcher: "/user",
-// };
+// Apply middleware to all routes
+export const config = {
+  matcher: ["/((?!_next|api|static|favicon.ico).*)"],
+};
