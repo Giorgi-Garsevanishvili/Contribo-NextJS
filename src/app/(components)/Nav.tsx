@@ -1,9 +1,9 @@
+import { auth } from "@/auth";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { options } from "../api/auth/[...nextauth]/options";
+import SignOut from "./log-out";
 
 const Nav = async () => {
-  const session = await getServerSession(options);
+  const session = await auth()
   return (
     <header className="bg-gray-600 text-gray-100">
       <nav className="flex justify-between items-center w-full px-10 py-4">
@@ -14,10 +14,11 @@ const Nav = async () => {
           <Link href={"/ClientMember"}>Client Member</Link>
           <Link href={"/Member"}>Member</Link>
           <Link href={"/Public"}>Public</Link>
+          <Link href={"/user"}>Users</Link>
           {session ? (
-            <Link href={"/api/auth/signout?callbackUrl=/"}>Logout</Link>
+            <SignOut></SignOut>
           ) : (
-            <Link href={"/api/auth/signin"}>Login</Link>
+            <Link href={"/signin"}>Login</Link>
           )}
         </div>
       </nav>
